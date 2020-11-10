@@ -1,112 +1,180 @@
----
-title: "Crinkled arcs in Hilbert space"
-output: html_document
----
+% -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
+\documentclass[nojss]{jss}
+\usepackage{dsfont}
+\usepackage{bbm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{yfonts}
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% just as usual
+\author{Robin K. S. Hankin\\Auckland University of Technology}
+\title{Crinkled arcs in Hilbert space}
+
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{Robin K. S. Hankin}
+\Plaintitle{Crinkled arcs in Hilbert space}
+\Shorttitle{Crinkled arcs in Hilbert space}
+
+%% an abstract and keywords
+\Abstract{This short document presents some numerical illustrations of
+the concept of {\em crinkled arc}.}
+
+\Keywords{Crinkled arc, Hilbert space}
+
+\Plainkeywords{Crinkled arc, Hilbert space}
+
+  
+%% publication information
+%% NOTE: This needs to filled out ONLY IF THE PAPER WAS ACCEPTED.
+%% If it was not (yet) accepted, leave them commented.
+%% \Volume{13}
+%% \Issue{9}
+%% \Month{September}
+%% \Year{2004}
+%% \Submitdate{2004-09-29}
+%% \Acceptdate{2004-09-29}
+%% \Repository{https://github.com/RobinHankin/lorentz} %% this line for Tragula
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  Robin K. S. Hankin\\%\orcid{https://orcid.org/0000-0001-5982-0415}\\
+  Auckland University of Technology\\
+  E-mail: \email{hankin.robin@gmail.com}
+}
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/1/31336-5053
+%% Fax: +43/1/31336-734
+
+%% for those who use Sweave please include the following line (with % symbols):
+%% need no \usepackage{Sweave.sty}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\SweaveOpts{}
+
+\newcommand{\bx}{\mathbf x}
+
+\begin{document}
+
 
 This R script verifies numerically that Halmos's crinkled arc is
 indeed a crinkled arc.
 
-A crinkled arc is a continuous curve in Hilbert space (Hilbert 1982).
-Specifically, consider $f\colon \left[0,1\right]\longrightarrow X$,
-where $X$ is a Hilbert space with inner product
-$\langle\cdot,\cdot\rangle$ .  We say that $f$ is a _crinkled arc_ if
-it is continuous and possesses the crinkly property: if $0\leqslant
-a<b\leqslant c<d\leqslant 1$ then $\langle
+A crinkled arc is a continuous curve in Hilbert
+space~\citep{halmos1982}.  Specifically, consider $f\colon
+\left[0,1\right]\longrightarrow X$, where $X$ is a Hilbert space with
+inner product $\langle\cdot,\cdot\rangle$.  We say that $f$ is a {\em
+  crinkled arc} if it is continuous and possesses the crinkly
+property: if $0\leqslant a<b\leqslant c<d\leqslant 1$ then $\langle
 f(b)-f(a),f(d)-f(c)\rangle=0$; that is, the chord joining $f(b)$ to
 $f(a)$, and the chord joining $f(d)$ to $f(c)$, are orthogonal
 whenever the intervals $\left[a,b\right]$ and $\left[c,d\right]$ are
-non-overlapping.  Halmos makes the observation that every attempt to
-construct a crinkled arc results in essentially
+non-overlapping.  \cite{halmos1982} makes the observation that every
+attempt to construct a crinkled arc results in essentially
 
-$$
-f(t) = \sqrt{2}\sum_{n=1}^\infty x_n
+\begin{equation}
+f(t) = \sqrt{2}\sum_{n=1}^\infty\bx_n
 \frac{
 \sin\left(n-1/2\right)\pi t
 }{
 \left(n-1/2\right)\pi
 }
-$$
+\end{equation}
 
-where $x_i$ are an orthonormal set, $\langle x_i,x_j\rangle=0$ for
+where $\bx_i$ are an orthonormal set, $\langle\bx_i,\bx_j\rangle=0$ for
 $i\neq j$.
 
 We now verify numerically that the Halmos arc does in fact possess the
-crinkly property, using R and Mathematica.  Below, function `f()`
-calculates the coefficient of $x_n$ in the crinkled arc.  Because the
-$x_i$ are orthogonal, we can calculate
+crinkly property, using R and Mathematica.  Below, function \verb+f()+
+calculates the coefficient of $\bx_n$ in the crinkled arc.  Because
+the $\bx_i$ are orthogonal, we can calculate
 $\left<f(b)-f(a),f(d)-f(a)\right>$ by summing $f(n,a,b,c,d)$ over
 $n=1,2,3,\ldots$.
 
 
-```{r,definef}
+<<definefunctionf>>=
 f <- function(n,a,b,c,d){
   jj <- (n-1/2)*pi
   (sin(jj*b)-sin(jj*a))*(sin(jj*d)-sin(jj*c))/jj^2
 }
-```
+@
 
 First a non-overlapping pair of intervals $[0.1,0.2]$ and $[0.3,0.4]$:
 
-```{r, plotnonoverlapping}
+
+\begin{figure}[htbp]
+  \begin{center}
+<<plotnonoverlapping,echo=TRUE, fig=TRUE>>=
 plot(cumsum(f(1:100,a=0.1,b=0.2,c=0.3,d=0.4)),type='l')
 abline(h=0)
-```
+@
+\caption{First 100 convergents of a crinkled arc\label{nonoverlapping}}
+  \end{center}
+\end{figure}
 
-In the above graph, see how the function tends to zero.  Now for
-comparison an overlapping pair $[0.1,0.4]$ and $[0.3,0.5]$:
+In figure~\ref{nonoverlapping}, see how the function tends to zero.
+Compare figure~\ref{overlapping} in which an overlapping pair
+$[0.1,0.4]$ and $[0.3,0.5]$ is used, and the function does not tend to
+zero.
 
-```{r,overlapping}
+\begin{figure}[htbp]
+  \begin{center}
+<<plotoverlapping,echo=TRUE, fig=TRUE>>=
 plot(cumsum(f(1:100,a=0.1,b=0.4,c=0.3,d=0.5)),type='l')
 abline(h=0)
-```
+@
+\caption{First 100 convergents of a crinkled arc\label{overlapping}}
+  \end{center}
+\end{figure}
 
-In the above graph, the function does not tend to zero.
 
-## Mathematica
-
+\subsection{Mathematica}
 
 In mathematica we can try to evaluate the dot product of the two
-chords symbollically:
+chords symbolically:
 
-```
+\begin{verbatim}
 Assuming[(a<b) && (b<c)  && (c<d),
       Sum[1/(n-1/2)^2 * (Sin[(n-1/2)*Pi*b]-Sin[(n-1/2)*Pi*a])*(Sin[(n-1/2)*Pi*d]-Sin[(n-1/2)*Pi*c]),
       {n,1,Infinity}
   ]]
-```
+\end{verbatim}
 
 but this evaluates to a very complicated and effectively
-unsimplifiable expression involving a sum of 16 `LerchPhi[]`
+unsimplifiable expression involving a sum of 16 \verb+LerchPhi[]+
 functions.  However, we can evaluate the expression numerically for a
 particular set of values of the intervals:
 
-```
+\begin{verbatim}
 In[1]:= Sum[1/(n-1/2)^2 * (Sin[(n-1/2)*Pi*0.2]-Sin[(n-1/2)*Pi*0.1])*(Sin[(n-1/2)*Pi*0.4]-Sin[(n-1/2)*Pi*0.3]), 
         {n,1,Infinity}] 
 
                    -12             -17
 Out[1]= -2.81775 10    - 2.77556 10    I
-```
+\end{verbatim}
 
 (here again $a=0.1$, $b=0.2$, $c=0.3$, and $d=0.4$); the value is
 quite small.  For comparison we can choose $a=0.1$, $b=0.5$, $c=0.4$,
 and $d=0.8$:
 
-```
+\begin{verbatim}
 In[2]:= Sum[1/(n-1/2)^2 * (Sin[(n-1/2)*Pi*0.5]-Sin[(n-1/2)*Pi*0.1])*(Sin[(n-1/2)*Pi*0.8]-Sin[(n-1/2)*Pi*0.4]),
         {n,1,Infinity}] 
 
                             -16
 Out[2]= 0.49348 - 1.94289 10    I
-```
+\end{verbatim}
 
 which is definitely nonzero.
 
-* P. R. Halmos 1982.  "A Hilbert space problem book".  Springer
-* https://en.wikipedia.org/wiki/Crinkled_arc
-
-
+\bibliography{crinkled}
+\end{document}
