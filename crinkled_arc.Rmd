@@ -1,0 +1,112 @@
+---
+title: "Crinkled arcs in Hilbert space"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This R script verifies numerically that Halmos's crinkled arc is
+indeed a crinkled arc.
+
+A crinkled arc is a continuous curve in Hilbert space (Hilbert 1982).
+Specifically, consider $f\colon \left[0,1\right]\longrightarrow X$,
+where $X$ is a Hilbert space with inner product
+$\langle\cdot,\cdot\rangle$ .  We say that $f$ is a _crinkled arc_ if
+it is continuous and possesses the crinkly property: if $0\leqslant
+a<b\leqslant c<d\leqslant 1$ then $\langle
+f(b)-f(a),f(d)-f(c)\rangle=0$; that is, the chord joining $f(b)$ to
+$f(a)$, and the chord joining $f(d)$ to $f(c)$, are orthogonal
+whenever the intervals $\left[a,b\right]$ and $\left[c,d\right]$ are
+non-overlapping.  Halmos makes the observation that every attempt to
+construct a crinkled arc results in essentially
+
+$$
+f(t) = \sqrt{2}\sum_{n=1}^\infty x_n
+\frac{
+\sin\left(n-1/2\right)\pi t
+}{
+\left(n-1/2\right)\pi
+}
+$$
+
+where $x_i$ are an orthonormal set, $\langle x_i,x_j\rangle=0$ for
+$i\neq j$.
+
+We now verify numerically that the Halmos arc does in fact possess the
+crinkly property, using R and Mathematica.  Below, function `f()`
+calculates the coefficient of $x_n$ in the crinkled arc.  Because the
+$x_i$ are orthogonal, we can calculate
+$\left<f(b)-f(a),f(d)-f(a)\right>$ by summing $f(n,a,b,c,d)$ over
+$n=1,2,3,\ldots$.
+
+
+```{r,definef}
+f <- function(n,a,b,c,d){
+  jj <- (n-1/2)*pi
+  (sin(jj*b)-sin(jj*a))*(sin(jj*d)-sin(jj*c))/jj^2
+}
+```
+
+First a non-overlapping pair of intervals $[0.1,0.2]$ and $[0.3,0.4]$:
+
+```{r, plotnonoverlapping}
+plot(cumsum(f(1:100,a=0.1,b=0.2,c=0.3,d=0.4)),type='l')
+abline(h=0)
+```
+
+In the above graph, see how the function tends to zero.  Now for
+comparison an overlapping pair $[0.1,0.4]$ and $[0.3,0.5]$:
+
+```{r,overlapping}
+plot(cumsum(f(1:100,a=0.1,b=0.4,c=0.3,d=0.5)),type='l')
+abline(h=0)
+```
+
+In the above graph, the function does not tend to zero.
+
+## Mathematica
+
+
+In mathematica we can try to evaluate the dot product of the two
+chords symbollically:
+
+```
+Assuming[(a<b) && (b<c)  && (c<d),
+      Sum[1/(n-1/2)^2 * (Sin[(n-1/2)*Pi*b]-Sin[(n-1/2)*Pi*a])*(Sin[(n-1/2)*Pi*d]-Sin[(n-1/2)*Pi*c]),
+      {n,1,Infinity}
+  ]]
+```
+
+but this evaluates to a very complicated and effectively
+unsimplifiable expression involving a sum of 16 `LerchPhi[]`
+functions.  However, we can evaluate the expression numerically for a
+particular set of values of the intervals:
+
+```
+In[1]:= Sum[1/(n-1/2)^2 * (Sin[(n-1/2)*Pi*0.2]-Sin[(n-1/2)*Pi*0.1])*(Sin[(n-1/2)*Pi*0.4]-Sin[(n-1/2)*Pi*0.3]), 
+        {n,1,Infinity}] 
+
+                   -12             -17
+Out[1]= -2.81775 10    - 2.77556 10    I
+```
+
+(here again $a=0.1$, $b=0.2$, $c=0.3$, and $d=0.4$); the value is
+quite small.  For comparison we can choose $a=0.1$, $b=0.5$, $c=0.4$,
+and $d=0.8$:
+
+```
+In[2]:= Sum[1/(n-1/2)^2 * (Sin[(n-1/2)*Pi*0.5]-Sin[(n-1/2)*Pi*0.1])*(Sin[(n-1/2)*Pi*0.8]-Sin[(n-1/2)*Pi*0.4]),
+        {n,1,Infinity}] 
+
+                            -16
+Out[2]= 0.49348 - 1.94289 10    I
+```
+
+which is definitely nonzero.
+
+* P. R. Halmos 1982.  "A Hilbert space problem book".  Springer
+* https://en.wikipedia.org/wiki/Crinkled_arc
+
+
