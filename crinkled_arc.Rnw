@@ -82,7 +82,7 @@ non-overlapping.  \cite{halmos1982} makes the observation that every
 attempt to construct a crinkled arc results in essentially
 
 \begin{equation}
-f(t) = \sqrt{2}\sum_{n=1}^\infty\bx_n
+f(t) = \sum_{n=1}^\infty\bx_n
 \frac{
 \sin\left(n-1/2\right)\pi t
 }{
@@ -90,16 +90,48 @@ f(t) = \sqrt{2}\sum_{n=1}^\infty\bx_n
 }
 \end{equation}
 
-where $\bx_i$ are an orthonormal set, $\langle\bx_i,\bx_j\rangle=0$ for
-$i\neq j$.
+where $\bx_i$ are an orthonormal set, $\langle\bx_i,\bx_j\rangle=0$
+for $i\neq j$ (\citeauthor{halmos1982} includes a factor of
+$\sqrt{2}$).  We now verify numerically that the Halmos arc does in
+fact possess the crinkly property, using R and Mathematica.
 
-We now verify numerically that the Halmos arc does in fact possess the
-crinkly property, using R and Mathematica.  Below, function \verb+f()+
-calculates the coefficient of $\bx_n$ in the crinkled arc.  Because
-the $\bx_i$ are orthogonal, we can calculate
-$\left<f(b)-f(a),f(d)-f(a)\right>$ by summing $f(n,a,b,c,d)$ over
-$n=1,2,3,\ldots$.
+\begin{equation}\label{fbadc}
+\begin{split}
+\left\langle f(b)-f(a),f(d)-f(c)\right\rangle &=
+\left\langle
+\sum_{n=1}^\infty\bx_n \frac{\sin\left(n-1/2\right)\pi a}{\left(n-1/2\right)\pi}-
+\sum_{n=1}^\infty\bx_n \frac{\sin\left(n-1/2\right)\pi b}{\left(n-1/2\right)\pi},\right.\\
+&{}\qquad\qquad\left.
+\sum_{n=1}^\infty\bx_n \frac{\sin\left(n-1/2\right)\pi c}{\left(n-1/2\right)\pi}-
+\sum_{n=1}^\infty\bx_n \frac{\sin\left(n-1/2\right)\pi d}{\left(n-1/2\right)\pi}
+\right\rangle\\
+&=
+\left\langle
+\sum_{n=1}^\infty\bx_n \frac{\sin (ma)}{m}-
+\sum_{n=1}^\infty\bx_n \frac{\sin (mb)}{m},
+\sum_{n=1}^\infty\bx_n \frac{\sin(mc)}{m}-
+\sum_{n=1}^\infty\bx_n \frac{\sin(md)}{m}
+\right\rangle\\
+ & = \sum_{n=1}^\infty\left(
+\frac{\sin (ma)}{m}-
+\frac{\sin (mb)}{m}\right)\cdot\left(
+\frac{\sin (mc)}{m}-
+\frac{\sin (md)}{m}
+\right)
+\langle\bx_n,\bx_n\rangle
+\\
+ & = \sum_{n=1}^\infty\frac{
+(\sin (ma)-\sin (mb))\cdot
+(\sin (mc)-\sin (md))
+ }{
+m^2
+}.
+\end{split}
+\end{equation}
 
+where $m=m(n)=(n-1/2)\pi$.  Equation~\ref{fbadc} is easily evaluated
+numerically; below, function \verb+f()+ calculates the partial sums of
+the right hand side:
 
 <<definefunctionf>>=
 f <- function(n,a,b,c,d){
@@ -108,36 +140,38 @@ f <- function(n,a,b,c,d){
 }
 @
 
-First a non-overlapping pair of intervals $[0.1,0.2]$ and $[0.3,0.4]$:
+Figure~\ref{plot3} shows a numerical evaluation of the first 100
+partial sums of equation~\ref{fbadc} for differing values of
+$a,b,c,d$.
 
-
-\begin{figure}[htbp]
+\begin{figure}[h]
   \begin{center}
-<<plotnonoverlapping,echo=TRUE, fig=TRUE>>=
-plot(cumsum(f(1:100,a=0.1,b=0.2,c=0.3,d=0.4)),type='l')
-abline(h=0)
+<<plot3,echo=FALSE, fig=TRUE>>=
+plot(NA,xlim=c(0,100),ylim=c(-0.01,0.03))
+abline(h=0,col='gray')
+points(cumsum(f(1:100,a=0.1,b=0.2,c=0.3,d=0.4 )),type="l",col="black")
+points(cumsum(f(1:100,a=0.1,b=0.3,c=0.27,d=0.4)),type="l",col="blue")
+points(cumsum(f(1:100,a=0.1,b=0.4,c=0.4,d=0.5 )),type="l",col="red")
+legend("topright",
+       lty=1,pch=NA,
+       col=c("black","blue","red"),
+       legend=c("a=0.1, b=0.2, c=0.3, d=0.4","a=0.1, b=0.4, c=0.3, d=0.5","a=0.1, b=0.4, c=0.4, d=0.5"))
 @
-\caption{First 100 convergents of a crinkled arc\label{nonoverlapping}}
+\caption{ First 100 \label{plot3} partial sums for $\left\langle
+  f(b)-f(a),f(d)-f(c)\right\rangle$ with $a=0.1,b=0.2,c=0.3,d=0.4$
+  (nonoverlapping; black), $a=0.1,b=0.4,c=0.3,d=0.5$ (overlapping;
+  blue) and $a=0.1,b=0.4,c=0.4,d=0.5$ (abutting; red).  See how the
+  nonoverlapping intervals approach zero, the overlapping intervals
+  approach a nonzero value, and the abutting intervals approach zero
+  but more slowly than the nonoverlapping intervals}
   \end{center}
 \end{figure}
 
-In figure~\ref{nonoverlapping}, see how the function tends to zero.
-Compare figure~\ref{overlapping} in which an overlapping pair
-$[0.1,0.4]$ and $[0.3,0.5]$ is used, and the function does not tend to
-zero.
+\bibliography{crinkled}
+\clearpage
 
-\begin{figure}[htbp]
-  \begin{center}
-<<plotoverlapping,echo=TRUE, fig=TRUE>>=
-plot(cumsum(f(1:100,a=0.1,b=0.4,c=0.3,d=0.5)),type='l')
-abline(h=0)
-@
-\caption{First 100 convergents of a crinkled arc\label{overlapping}}
-  \end{center}
-\end{figure}
-
-
-\subsection{Mathematica}
+\appendix
+\subsection*{Appendix: Mathematica}
 
 In mathematica we can try to evaluate the dot product of the two
 chords symbolically:
@@ -176,5 +210,4 @@ Out[2]= 0.49348 - 1.94289 10    I
 
 which is definitely nonzero.
 
-\bibliography{crinkled}
 \end{document}
