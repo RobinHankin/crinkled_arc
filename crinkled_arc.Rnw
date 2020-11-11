@@ -65,10 +65,6 @@ the concept of {\em crinkled arc}.}
 
 \begin{document}
 
-
-This R script verifies numerically that Halmos's crinkled arc is
-indeed a crinkled arc.
-
 A crinkled arc is a continuous curve in Hilbert
 space~\citep{halmos1982}.  Specifically, consider $f\colon
 \left[0,1\right]\longrightarrow X$, where $X$ is a Hilbert space with
@@ -78,10 +74,13 @@ property: if $0\leqslant a<b\leqslant c<d\leqslant 1$ then $\langle
 f(b)-f(a),f(d)-f(c)\rangle=0$; that is, the chord joining $f(b)$ to
 $f(a)$, and the chord joining $f(d)$ to $f(c)$, are orthogonal
 whenever the intervals $\left[a,b\right]$ and $\left[c,d\right]$ are
-non-overlapping.  \cite{halmos1982} makes the observation that every
+non-overlapping.  \cite{halmos1982} interprets such a curve as making
+a sudden right angle turn at each point, justifying his statements
+that (infinite-dimensional) Hilbert space is ``even roomier than it
+looks''.  \cite{halmos1982} goes on to make the observation that every
 attempt to construct a crinkled arc results in essentially
 
-\begin{equation}
+\begin{equation}\label{deff}
 f(t) = \sum_{n=1}^\infty\bx_n
 \frac{
 \sin\left(n-1/2\right)\pi t
@@ -92,8 +91,11 @@ f(t) = \sum_{n=1}^\infty\bx_n
 
 where $\bx_i$ are an orthonormal set, $\langle\bx_i,\bx_j\rangle=0$
 for $i\neq j$ (\citeauthor{halmos1982} includes a factor of
-$\sqrt{2}$).  We now verify numerically that the Halmos arc does in
-fact possess the crinkly property, using R and Mathematica.
+$\sqrt{2}$).  \cite{vitale1975} proves the uniqueness of
+equation~\ref{deff}, up to reparametrization, translations and
+scaling, and inclusion.  We now verify numerically that the Halmos arc
+does in fact possess the crinkly property, using R.  Given the
+function defined in equation~\ref{deff}, we have
 
 \begin{equation}\label{fbadc}
 \begin{split}
@@ -125,7 +127,7 @@ fact possess the crinkly property, using R and Mathematica.
 (\sin (mc)-\sin (md))
  }{
 m^2
-}.
+},
 \end{split}
 \end{equation}
 
@@ -142,7 +144,8 @@ f <- function(n,a,b,c,d){
 
 Figure~\ref{plot3} shows a numerical evaluation of the first 100
 partial sums of equation~\ref{fbadc} for differing values of
-$a,b,c,d$.
+$a,b,c,d$.  Figure~\ref{plot3b} shows a log-log plot of a range of
+intervals.
 
 \begin{figure}[h]
   \begin{center}
@@ -157,7 +160,7 @@ legend("topright",
        col=c("black","blue","red"),
        legend=c("a=0.1, b=0.2, c=0.3, d=0.4","a=0.1, b=0.4, c=0.3, d=0.5","a=0.1, b=0.4, c=0.4, d=0.5"))
 @
-\caption{ First 100 \label{plot3} partial sums for $\left\langle
+\caption{First 100 \label{plot3} partial sums for $\left\langle
   f(b)-f(a),f(d)-f(c)\right\rangle$ with $a=0.1,b=0.2,c=0.3,d=0.4$
   (nonoverlapping; black), $a=0.1,b=0.4,c=0.3,d=0.5$ (overlapping;
   blue) and $a=0.1,b=0.4,c=0.4,d=0.5$ (abutting; red).  See how the
@@ -167,47 +170,62 @@ legend("topright",
   \end{center}
 \end{figure}
 
-\bibliography{crinkled}
+\begin{figure}[h]
+  \begin{center}
+<<plot3b,echo=FALSE, fig=TRUE>>=
+f <- function(n,a,b,c,d){
+  jj <- (n-1/2)*pi
+  (sin(jj*b)-sin(jj*a))*(sin(jj*d)-sin(jj*c))/jj^2
+}
+
+plot(NA,xlim=c(0,3),ylim=c(-20,0),xlab="log10(n)",ylab="log10(error)")
+abline(h=0,col='gray')
+n <- 30
+vals <- seq(from=0.2,to=0.4,len=n)
+for(i in seq_along(vals)){
+  points(log10(1:1000),log(abs(cumsum(f(1:1000,a=0.1,b=0.3, c=vals[i], d=0.3+vals[i])))),type="l",col=rainbow(n)[i])
+}
+i <- n/2
+  points(log10(1:1000),log(abs(cumsum(f(1:1000,a=0.1,b=0.3, c=vals[i], d=0.3+vals[i])))),type="l",col=rainbow(n)[i],lwd=9)
+ylow <- -20
+yhigh <- -10
+points(cbind(0.1,seq(from=yhigh,to=ylow,len=100)),pch=15,col=rainbow(100))
+thing <- function(y,a,b,c,d,xa=0.2,xb=0.7){
+  segments(x0=xa+a*(xb-xa), x1=xa+b*(xb-xa),y0=y)
+  segments(x0=xa+c*(xb-xa), x1=xa+d*(xb-xa),y0=y+0.01)
+}
+
+nn <- 10
+for(i in 0:nn){
+  thing(y=yhigh + i/nn*(ylow-yhigh), a=0.1, b=0.3, c=0.2 + (0.3)*i/nn, d=0.4 + (0.3)*i/nn)
+}
+@
+\caption{First 1000 \label{plot3b} partial sums for $\left\langle
+  f(b)-f(a),f(d)-f(c)\right\rangle$ for a variety of overlapping and
+  nonoverlapping intervals shown in the colour key on the right; abutting
+  case plotted in a thicker line.  See how the nonoverlapping cases approach
+  zero according to a power law, while overlapping cases approach a small but
+  finite nonzero value; the abutting case exhibits intermediate behaviour} 
+  \end{center}
+\end{figure}
+
 \clearpage
+\bibliography{crinkled}
 
 \appendix
-\subsection*{Appendix: Mathematica}
+\subsection*{Appendix: symbolic calculation}
 
-In mathematica we can try to evaluate the dot product of the two
-chords symbolically:
+Mathematica can evaluate equation~\ref{fbadc} symbolically; the idiom would be
 
 \begin{verbatim}
-Assuming[(a<b) && (b<c)  && (c<d),
-      Sum[1/(n-1/2)^2 * (Sin[(n-1/2)*Pi*b]-Sin[(n-1/2)*Pi*a])*(Sin[(n-1/2)*Pi*d]-Sin[(n-1/2)*Pi*c]),
-      {n,1,Infinity}
+Assuming[(a<b) && (b<c) && (c<d),  Sum[
+     (Sin[(n-1/2)*Pi*b]-Sin[(n-1/2)*Pi*a])*
+     (Sin[(n-1/2)*Pi*d]-Sin[(n-1/2)*Pi*c])/(Pi*(n-1/2)^2),
+       {n,1,Infinity}
   ]]
 \end{verbatim}
 
-but this evaluates to a very complicated and effectively
-unsimplifiable expression involving a sum of 16 \verb+LerchPhi[]+
-functions.  However, we can evaluate the expression numerically for a
-particular set of values of the intervals:
-
-\begin{verbatim}
-In[1]:= Sum[1/(n-1/2)^2 * (Sin[(n-1/2)*Pi*0.2]-Sin[(n-1/2)*Pi*0.1])*(Sin[(n-1/2)*Pi*0.4]-Sin[(n-1/2)*Pi*0.3]), 
-        {n,1,Infinity}] 
-
-                   -12             -17
-Out[1]= -2.81775 10    - 2.77556 10    I
-\end{verbatim}
-
-(here again $a=0.1$, $b=0.2$, $c=0.3$, and $d=0.4$); the value is
-quite small.  For comparison we can choose $a=0.1$, $b=0.5$, $c=0.4$,
-and $d=0.8$:
-
-\begin{verbatim}
-In[2]:= Sum[1/(n-1/2)^2 * (Sin[(n-1/2)*Pi*0.5]-Sin[(n-1/2)*Pi*0.1])*(Sin[(n-1/2)*Pi*0.8]-Sin[(n-1/2)*Pi*0.4]),
-        {n,1,Infinity}] 
-
-                            -16
-Out[2]= 0.49348 - 1.94289 10    I
-\end{verbatim}
-
-which is definitely nonzero.
+but this returns a very complicated and effectively unsimplifiable
+expression involving a sum of 16 \verb+LerchPhi[]+ functions.
 
 \end{document}
