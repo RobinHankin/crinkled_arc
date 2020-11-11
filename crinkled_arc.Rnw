@@ -77,8 +77,8 @@ whenever the intervals $\left[a,b\right]$ and $\left[c,d\right]$ are
 non-overlapping.  \cite{halmos1982} interprets such a curve as making
 a sudden right angle turn at each point, justifying his statements
 that (infinite-dimensional) Hilbert space is ``even roomier than it
-looks''.  \cite{halmos1982} goes on to make the observation that every
-attempt to construct a crinkled arc results in essentially
+looks''.  He then observes that every attempt to construct a crinkled
+arc results in essentially
 
 \begin{equation}\label{deff}
 f(t) = \sum_{n=1}^\infty\bx_n
@@ -180,24 +180,30 @@ f <- function(n,a,b,c,d){
 
 plot(NA,xlim=c(0,3),ylim=c(-20,0),xlab="log10(n)",ylab="log10(error)")
 abline(h=0,col='gray')
-n <- 30
+n <- 50  # number of lines to plot
 vals <- seq(from=0.2,to=0.4,len=n)
 for(i in seq_along(vals)){
   points(log10(1:1000),log(abs(cumsum(f(1:1000,a=0.1,b=0.3, c=vals[i], d=0.3+vals[i])))),type="l",col=rainbow(n)[i])
 }
-i <- n/2
+
+## Draw the abutting case with a thick line:
+{
+  i <- round(n/2)
   points(log10(1:1000),log(abs(cumsum(f(1:1000,a=0.1,b=0.3, c=vals[i], d=0.3+vals[i])))),type="l",col=rainbow(n)[i],lwd=9)
-ylow <- -20
-yhigh <- -10
-points(cbind(0.1,seq(from=yhigh,to=ylow,len=100)),pch=15,col=rainbow(100))
-thing <- function(y,a,b,c,d,xa=0.2,xb=0.7){
-  segments(x0=xa+a*(xb-xa), x1=xa+b*(xb-xa),y0=y)
-  segments(x0=xa+c*(xb-xa), x1=xa+d*(xb-xa),y0=y+0.01)
 }
 
-nn <- 10
+## Now a key:
+ylow <- -20
+yhigh <- -10
+points(cbind(0.1,seq(from=yhigh,to=ylow,len=100)),pch=15,col=rainbow(100),cex=0.3)
+two_segments <- function(y,a,b,c,d,xa=0.2,xb=0.7){
+  segments(x0=xa+a*(xb-xa), x1=xa+b*(xb-xa),y0=y)
+  segments(x0=xa+c*(xb-xa), x1=xa+d*(xb-xa),y0=y+0.03)
+}
+
+nn <- 20
 for(i in 0:nn){
-  thing(y=yhigh + i/nn*(ylow-yhigh), a=0.1, b=0.3, c=0.2 + (0.3)*i/nn, d=0.4 + (0.3)*i/nn)
+  two_segments(y=yhigh + i/nn*(ylow-yhigh), a=0.1, b=0.3, c=0.2 + (0.2)*i/nn, d=0.4 + (0.2)*i/nn)
 }
 @
 \caption{First 1000 \label{plot3b} partial sums for $\left\langle
@@ -205,7 +211,8 @@ for(i in 0:nn){
   nonoverlapping intervals shown in the colour key on the right; abutting
   case plotted in a thicker line.  See how the nonoverlapping cases approach
   zero according to a power law, while overlapping cases approach a small but
-  finite nonzero value; the abutting case exhibits intermediate behaviour} 
+  finite nonzero value; the abutting case exhibits intermediate behaviour
+  subject to rounding error} 
   \end{center}
 \end{figure}
 
