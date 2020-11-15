@@ -23,8 +23,13 @@
 \Shorttitle{Crinkled arcs in Hilbert space}
 
 %% an abstract and keywords
-\Abstract{This short document presents some numerical illustrations of
-the concept of {\em crinkled arc}.}
+
+\Abstract{
+The concept of crinkled arc illustrates some non-intuitive properties
+of infinite dimensional Hilbert space.  In this short document I use
+the R programming language to numerically illustrate properties of a
+crinkled arc.}
+
 
 \Keywords{Crinkled arc, Hilbert space}
 
@@ -66,17 +71,18 @@ the concept of {\em crinkled arc}.}
 \begin{document}
 
 A crinkled arc is a continuous curve in Hilbert
-space~\citep{halmos1982}.  Specifically, consider $f\colon
+space~\citep{halmos1982}.  Consider $f\colon
 \left[0,1\right]\longrightarrow X$, where $X$ is a Hilbert space with
-inner product $\langle\cdot,\cdot\rangle$.  We say that $f$ is a {\em
-  crinkled arc} if it is continuous and possesses the crinkly
-property: if $0\leqslant a<b\leqslant c<d\leqslant 1$ then $\langle
-f(b)-f(a),f(d)-f(c)\rangle=0$; that is, the chord joining $f(b)$ to
-$f(a)$, and the chord joining $f(d)$ to $f(c)$, are orthogonal
-whenever the intervals $\left[a,b\right]$ and $\left[c,d\right]$ are
-non-overlapping.  \cite{halmos1982} interprets such a curve as making
-a sudden right angle turn at each point, justifying his statements
-that (infinite-dimensional) Hilbert space is ``even roomier than it
+inner product $\langle\cdot,\cdot\rangle$.  Assuming~$f$ to be
+injective, its image is a {\em crinkled arc} if it is continuous and
+possesses the crinkly property: $0\leqslant a<b\leqslant c<d\leqslant
+1$ then $\langle f(b)-f(a),f(d)-f(c)\rangle=0$; that is, the chord
+joining $f(b)$ to $f(a)$, and the chord joining $f(d)$ to $f(c)$, are
+orthogonal when intervals $\left[a,b\right]$ and $\left[c,d\right]$
+are non-overlapping (some authors refer to $f$ itself as the crinkled
+arc).  \cite{halmos1982} interprets such a curve as making a sudden
+right angle turn at each point, justifying his statements that
+(infinite-dimensional) Hilbert space is ``even roomier than it
 looks''.  He then observes that every attempt to construct a crinkled
 arc results in essentially
 
@@ -86,14 +92,17 @@ f(t) = \sum_{n=1}^\infty\bx_n
 \sin\left(n-1/2\right)\pi t
 }{
 \left(n-1/2\right)\pi
-}
+},\qquad 0\leqslant t\leqslant 1
 \end{equation}
 
 where $\bx_i$ are an orthonormal set, $\langle\bx_i,\bx_j\rangle=0$
 for $i\neq j$ (\citeauthor{halmos1982} includes a factor of
 $\sqrt{2}$).  \cite{vitale1975} proves the uniqueness of
 equation~\ref{deff}, up to reparametrization, translations and
-scaling, and inclusion.  We now verify numerically that the Halmos arc
+scaling, and inclusion.  Establishing that equation~\ref{deff} does
+indeed satisfy the crinkly property using symbolic algebra is not
+straightforward (see Appendix).  However, numerical verification is
+possible and I present below numerical evidence that the Halmos arc
 does in fact possess the crinkly property, using R.  Given the
 function defined in equation~\ref{deff}, we have
 
@@ -215,8 +224,14 @@ for(i in 0:nn){
   subject to rounding error} 
   \end{center}
 \end{figure}
-
 \clearpage
+
+\subsection*{Conclusions}
+
+In the study of Hilbert space, the crinkled arc is an interesting and
+informative object.  
+
+
 \bibliography{crinkled}
 
 \appendix
