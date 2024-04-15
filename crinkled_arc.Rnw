@@ -195,10 +195,10 @@ for(i in seq_along(vals)){
   points(log10(1:1000),log(abs(cumsum(f(1:1000,a=0.1,b=0.3, c=vals[i], d=0.3+vals[i])))),type="l",col=rainbow(n)[i])
 }
 
-## Draw the abutting case with a thick line:
+## Draw the abutting case with a thick black line:
 {
   i <- round(n/2)
-  points(log10(1:1000),log(abs(cumsum(f(1:1000,a=0.1,b=0.3, c=vals[i], d=0.3+vals[i])))),type="l",col=rainbow(n)[i],lwd=9)
+  points(log10(1:1000),log(abs(cumsum(f(1:1000,a=0.1,b=0.3, c=vals[i], d=0.3+vals[i])))),type="l",col="black",lwd=5)
 }
 
 ## Now a key:
