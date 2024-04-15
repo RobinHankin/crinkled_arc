@@ -138,9 +138,11 @@ m^2
 \end{split}
 \end{equation}
 
-where $m=m(n)=(n-1/2)\pi$.  Equation~\ref{fbadc} is easily evaluated
-numerically; below, function \verb+f()+ calculates the partial sums of
-the right hand side:
+where $m=m(n)=(n-1/2)\pi$: we would like to show that the right hand
+side approaches zero as $n\longrightarrow\infty$.
+Equation~\ref{fbadc} is easily approximated numerically; below,
+function \verb+f()+ calculates the partial sums of the right hand
+side:
 
 <<definefunctionf>>=
 f <- function(n,a,b,c,d){
