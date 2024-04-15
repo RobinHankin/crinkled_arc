@@ -25,16 +25,14 @@
 %% an abstract and keywords
 
 \Abstract{
-The concept of crinkled arc illustrates some non-intuitive properties
-of infinite dimensional Hilbert space.  In this short document I use
-the R programming language to numerically illustrate properties of a
-crinkled arc.}
-
+  The concept of crinkled arc illustrates some non-intuitive
+  properties of infinite dimensional Hilbert space.  In this short
+  document I use the \proglang{R} programming language to numerically
+  illustrate properties of a crinkled arc.
+}
 
 \Keywords{Crinkled arc, Hilbert space}
-
 \Plainkeywords{Crinkled arc, Hilbert space}
-
   
 %% publication information
 %% NOTE: This needs to filled out ONLY IF THE PAPER WAS ACCEPTED.
@@ -103,8 +101,8 @@ scaling, and inclusion.  Establishing that equation~\ref{deff} does
 indeed satisfy the crinkly property using symbolic algebra is not
 straightforward (see Appendix).  However, numerical verification is
 possible and I present below numerical evidence that the Halmos arc
-does in fact possess the crinkly property, using R.  Given the
-function defined in equation~\ref{deff}, we have
+does in fact possess the crinkly property, using \proglang{R}.  Given
+the function defined in equation~\ref{deff}, we have
 
 \begin{equation}\label{fbadc}
 \begin{split}
