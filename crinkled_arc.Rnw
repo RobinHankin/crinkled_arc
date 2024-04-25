@@ -159,7 +159,7 @@ intervals.
 \begin{figure}[h]
   \begin{center}
 <<plot3,echo=FALSE, fig=TRUE>>=
-plot(NA,xlim=c(0,100),ylim=c(-0.01,0.03))
+plot(NA,xlim=c(0,100),ylim=c(-0.01,0.03),ylab="cumulative sum")
 abline(h=0,col='gray')
 points(cumsum(f(1:100,a=0.1,b=0.2,c=0.3,d=0.4 )),type="l",col="black")
 points(cumsum(f(1:100,a=0.1,b=0.3,c=0.27,d=0.4)),type="l",col="blue")
