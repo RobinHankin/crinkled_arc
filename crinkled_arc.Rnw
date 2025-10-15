@@ -78,8 +78,8 @@ space~\citep{halmos1982}.  Consider $f\colon
 \left[0,1\right]\longrightarrow X$, where $X$ is a Hilbert space with
 inner product $\langle\cdot,\cdot\rangle$.  Assuming~$f$ to be
 injective, its image is a {\em crinkled arc} if it is continuous and
-possesses the crinkly property: $0\leqslant a<b\leqslant c<d\leqslant
-1$ then $\langle f(b)-f(a),f(d)-f(c)\rangle=0$; that is, the chord
+possesses the crinkly property: if $0\leqslant a<b\leqslant c<d\leqslant
+1$, then $\langle f(b)-f(a),f(d)-f(c)\rangle=0$; that is, the chord
 joining $f(b)$ to $f(a)$, and the chord joining $f(d)$ to $f(c)$, are
 orthogonal when intervals $\left[a,b\right]$ and $\left[c,d\right]$
 are non-overlapping (some authors refer to $f$ itself as the crinkled
