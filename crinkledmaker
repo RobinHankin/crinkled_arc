@@ -1,10 +1,7 @@
-
-
-## remember:  git clone https://github.com/RobinHankin/crinkled_arc
+#! /bin/bash
 
 cp ~/rstudio/tragula/tragula.bst .
 cp ~/rstudio/tragula/tragula.cls .
-cp ~/rstudio/tragula/orcid.pdf .
 cp ~/rstudio/tragula/tragula_word.pdf .
 cp ~/rstudio/tragula/tragula_knot.pdf .
 cp ~/rstudio/tragula/ORCID_iD.pdf .
