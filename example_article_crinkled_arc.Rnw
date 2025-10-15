@@ -14,8 +14,7 @@
 
 
 %% just as usual
-\author{Robin K. S. Hankin\orcid{https://orcid.org/0000-0001-5982-0415}\\
-University of Stirling}
+\author{Robin K. S. Hankin\orcid{https://orcid.org/0000-0001-5982-0415}}
 \title{Crinkled arcs in Hilbert space}
 
 %% for pretty printing and a nice hypersummary also set:
@@ -51,7 +50,8 @@ University of Stirling}
 \Address{
   Robin K. S. Hankin\\
   University of Stirling\\
-  E-mail: \email{hankin.robin@gmail.com}
+  Scotland\\
+  email: \email{hankin.robin@gmail.com}
 }
 %% It is also possible to add a telephone and fax number
 %% before the e-mail in the following format:
