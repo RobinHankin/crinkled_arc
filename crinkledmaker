@@ -1,0 +1,16 @@
+
+
+## remember:  git clone https://github.com/RobinHankin/crinkled_arc
+
+cp ~/rstudio/tragula/tragula.bst .
+cp ~/rstudio/tragula/tragula.cls .
+cp ~/rstudio/tragula/orcid.pdf .
+cp ~/rstudio/tragula/tragula_word.pdf .
+cp ~/rstudio/tragula/tragula_knot.pdf .
+cp ~/rstudio/tragula/ORCID_iD.pdf .
+R CMD Sweave example_article_crinkled_arc.Rnw
+pdflatex example_article_crinkled_arc
+bibtex example_article_crinkled_arc
+pdflatex example_article_crinkled_arc
+pdflatex example_article_crinkled_arc
+
