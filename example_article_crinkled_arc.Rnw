@@ -236,7 +236,8 @@ for(i in 0:nn){
 \subsection*{Conclusions}
 
 In the study of Hilbert space, the crinkled arc is an interesting and
-informative object.  
+informative object.  The crinky property of such an arc was
+demonstrated using numerical methods in the R programming language.
 
 
 \bibliography{crinkled}
